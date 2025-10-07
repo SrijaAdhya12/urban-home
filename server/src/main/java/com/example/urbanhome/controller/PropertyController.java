@@ -1,8 +1,10 @@
 package com.example.urbanhome.controller;
 
+import com.example.urbanhome.dto.PropertyResponse;
 import com.example.urbanhome.entity.Property;
 import com.example.urbanhome.entity.Property.PropertyType;
 import com.example.urbanhome.service.PropertyService;
+import com.example.urbanhome.service.PropertyServiceMock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,15 +14,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/properties")
 @RequiredArgsConstructor
 public class PropertyController {
 
-    private final PropertyService propertyService;
+    private final PropertyService propertyService; // real service
+    private final PropertyServiceMock propertyServiceMock; // mock service for frontend testing
 
-    // GET properties with filters and pagination
+    // -------------------------------
+    // Use mock service for React testing
+    // -------------------------------
+    @GetMapping("/mock")
+    public ResponseEntity<List<PropertyResponse>> getAllMockProperties() {
+        return ResponseEntity.ok(propertyServiceMock.getAllProperties());
+    }
+
+    // -------------------------------
+    // Real properties with filters & pagination
+    // -------------------------------
     @GetMapping
     public Page<Property> getProperties(
             @RequestParam(required = false) String city,
@@ -35,10 +49,10 @@ public class PropertyController {
     ) {
         Pageable pageable = PageRequest.of(page, 50); // 50 records per page
 
-        return propertyService.getPropertiesWithFilters(city, state, minPrice, maxPrice, type, rating, startDate, endDate, pageable);
+        return propertyService.getPropertiesWithFilters(city, state, minPrice, maxPrice, type, rating, startDate,
+                endDate, pageable);
     }
 
-    // GET property by ID
     @GetMapping("/{id}")
     public ResponseEntity<Property> getPropertyById(@PathVariable Long id) {
         return propertyService.getPropertyById(id)
@@ -46,13 +60,11 @@ public class PropertyController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // CREATE property
     @PostMapping
     public Property createProperty(@RequestBody Property property) {
         return propertyService.createProperty(property);
     }
 
-    // UPDATE property
     @PutMapping("/{id}")
     public ResponseEntity<Property> updateProperty(@PathVariable Long id, @RequestBody Property property) {
         try {
@@ -62,7 +74,6 @@ public class PropertyController {
         }
     }
 
-    // DELETE property
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProperty(@PathVariable Long id) {
         try {
