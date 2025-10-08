@@ -1,4 +1,4 @@
-package com.example.urbanhome.dto;
+package com.example.urbanhome.dto.response;
 
 import lombok.*;
 import java.time.LocalDateTime;
@@ -15,13 +15,11 @@ public class PropertyResponse {
     private String description;
     private PropertyType type;
     private double rating;
-    private Price price;
     private Location location;
+    private Price price;
     private List<String> features;
-    private List<String> restrictions; // NEW
+    private List<String> restrictions;
     private List<String> media;
-    private LocalDateTime dateAdded;
-    private LocalDateTime dateModified; // NEW
 
     @Getter
     @Setter

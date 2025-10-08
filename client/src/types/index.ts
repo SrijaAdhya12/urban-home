@@ -1,6 +1,20 @@
-export interface Property {
+export interface PropertyCardType {
   id: string;
   title: string;
+  type: 'PG' | 'Flat' | 'Apartment' | 'House';
+  rating: number;
+  rentAmount: number;
+  rentType?: 'monthly' | 'yearly';
+  thumbnail: string;
+  city: string;
+  state: string;
+  locality: string;
+  dateAdded: string;
+  features?: string[];
+}
+
+export interface PropertyDetailsType extends PropertyCardType {
+  landmark: string;
   description: string;
   location: {
     city: string;
@@ -19,37 +33,16 @@ export interface Property {
     maintenance?: number;
     gst?: number;
   };
-  rating: number;
-  type: 'PG' | 'Flat' | 'Apartment' | 'House';
-  features: string[];
   media: string[];
   owner: {
     name: string;
     phone: string;
     email: string;
   };
-  dateAdded: string;
   restrictions?: string[];
 }
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  address?: string;
-  profilePicture?: string;
-  dateJoined: string;
-}
-
-export interface AuthContextType {
-  user: User | null;
-  token: string | null;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, phone: string, password: string) => Promise<void>;
-  logout: () => void;
-  isLoading: boolean;
-}
+export type Property = PropertyDetailsType;
 
 export interface Filters {
   location: string;

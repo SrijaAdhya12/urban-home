@@ -32,12 +32,18 @@ public class PropertyService {
         property.setTitle(propertyDetails.getTitle());
         property.setDescription(propertyDetails.getDescription());
         property.setType(propertyDetails.getType());
-        property.setState(propertyDetails.getState());
-        property.setCity(propertyDetails.getCity());
-        property.setPincode(propertyDetails.getPincode());
-        property.setLocality(propertyDetails.getLocality());
-        property.setLandmark(propertyDetails.getLandmark());
-        property.setAddress(propertyDetails.getAddress());
+
+        // if (property.getLocation() == null)
+        //     property.setLocation(propertyDetails.getLocation());
+        // else {
+        //     property.getLocation().setState(propertyDetails.getLocation().getState());
+        //     property.getLocation().setCity(propertyDetails.getLocation().getCity());
+        //     property.getLocation().setPincode(propertyDetails.getLocation().getPincode());
+        //     property.getLocation().setLocality(propertyDetails.getLocation().getLocality());
+        //     property.getLocation().setLandmark(propertyDetails.getLocation().getLandmark());
+        //     property.getLocation().setAddress(propertyDetails.getLocation().getAddress());
+        // }
+
         property.setRentAmount(propertyDetails.getRentAmount());
         property.setRentType(propertyDetails.getRentType());
         property.setFeatures(propertyDetails.getFeatures());
@@ -67,9 +73,13 @@ public class PropertyService {
         return propertyRepository.findById(id);
     }
 
-    // Search filters
+    // Search filters (using location object)
     public Page<Property> getPropertiesByCity(String city, Pageable pageable) {
         return propertyRepository.findByCityIgnoreCase(city, pageable);
+    }
+
+    public Page<Property> getPropertiesByState(String state, Pageable pageable) {
+        return propertyRepository.findByStateIgnoreCase(state, pageable);
     }
 
     public Page<Property> getPropertiesByPriceRange(double minPrice, double maxPrice, Pageable pageable) {
@@ -88,6 +98,7 @@ public class PropertyService {
         return propertyRepository.findByDateAddedBetween(start, end, pageable);
     }
 
+    // Combined filters
     public Page<Property> getPropertiesWithFilters(
             String city,
             String state,
@@ -97,35 +108,20 @@ public class PropertyService {
             Double rating,
             LocalDateTime startDate,
             LocalDateTime endDate,
-            Pageable pageable
-    ) {
-        // Apply filters one by one. You can extend with a more complex Specification/Criteria API later.
-
-        if (city != null && !city.isEmpty()) {
+            Pageable pageable) {
+        if (city != null && !city.isEmpty())
             return getPropertiesByCity(city, pageable);
-        }
-
-        if (state != null && !state.isEmpty()) {
-            return propertyRepository.findByStateIgnoreCase(state, pageable);
-        }
-
-        if (minPrice != null && maxPrice != null) {
+        if (state != null && !state.isEmpty())
+            return getPropertiesByState(state, pageable);
+        if (minPrice != null && maxPrice != null)
             return getPropertiesByPriceRange(minPrice, maxPrice, pageable);
-        }
-
-        if (type != null) {
+        if (type != null)
             return getPropertiesByType(type, pageable);
-        }
-
-        if (rating != null) {
+        if (rating != null)
             return getPropertiesByRating(rating, pageable);
-        }
-
-        if (startDate != null && endDate != null) {
+        if (startDate != null && endDate != null)
             return getPropertiesByDateRange(startDate, endDate, pageable);
-        }
 
-        // If no filters, return all paginated
         return getAllProperties(pageable);
     }
 

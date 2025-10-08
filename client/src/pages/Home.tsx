@@ -31,9 +31,10 @@ const Home: React.FC = () => {
 			setError('')
 			try {
 				const data = await fetchProperties()
+				console.log(data)
 				setProperties(data)
 				setFilteredProperties(data)
-				setLocation('Mumbai, Maharashtra') // mock location
+				setLocation('Mumbai, Maharashtra') 
 			} catch (err) {
 				console.error(err)
 				setError('Failed to fetch properties. Please check your backend.')

@@ -26,9 +26,8 @@ public class Property {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PropertyType type; // PG, Flat, Apartment, House
+    private PropertyType type;
 
-    // Location fields
     @Column(nullable = false)
     private String state;
 
@@ -40,38 +39,31 @@ public class Property {
     private String landmark;
     private String address;
 
-    // Owner
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
 
-    // Rent
     @Column(nullable = false)
     private double rentAmount;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private RentType rentType; // MONTHLY, QUARTERLY, YEARLY
+    private RentType rentType;
 
-    // Features & restrictions
     @ElementCollection
     private List<String> features;
 
     @ElementCollection
     private List<String> restrictions;
 
-    // Media
     @ElementCollection
     private List<String> media;
 
-    // Rating
     private double rating;
 
-    // Dates
     private LocalDateTime dateAdded = LocalDateTime.now();
     private LocalDateTime dateModified = LocalDateTime.now();
 
-    // Enums
     public enum PropertyType {
         PG, FLAT, APARTMENT, HOUSE
     }

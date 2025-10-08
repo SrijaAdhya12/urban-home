@@ -1,6 +1,6 @@
 package com.example.urbanhome.controller;
 
-import com.example.urbanhome.dto.PropertyResponse;
+import com.example.urbanhome.dto.PropertiesDto;
 import com.example.urbanhome.entity.Property;
 import com.example.urbanhome.entity.Property.PropertyType;
 import com.example.urbanhome.service.PropertyService;
@@ -15,29 +15,26 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/properties")
 @RequiredArgsConstructor
 public class PropertyController {
 
-    private final PropertyService propertyService; 
-    private final PropertyServiceMock propertyServiceMock; 
+    private final PropertyService propertyService;
+    private final PropertyServiceMock propertyServiceMock;
 
-    
     @GetMapping("/mock")
-    public ResponseEntity<List<PropertyResponse>> getAllMockProperties() {
-        return ResponseEntity.ok(propertyServiceMock.getAllProperties());
+    public List<PropertiesDto> getAllMockProperties() {
+        return propertyServiceMock.getAllProperties();
     }
 
     @GetMapping("/mock/{id}")
-    public ResponseEntity<PropertyResponse> getMockPropertyById(@PathVariable Long id) {
-        return propertyServiceMock.getPropertyById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Optional<Property> getMockPropertyById(@PathVariable Long id) {
+        return propertyServiceMock.getPropertyById(id);
     }
 
-   
     @GetMapping
     public Page<Property> getProperties(
             @RequestParam(required = false) String city,
