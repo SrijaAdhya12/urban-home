@@ -25,9 +25,8 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/api/auth/**", "/health", "/api/properties/mock").permitAll() // Added mock
-                                                                                                        // endpoint
-                        .anyRequest().authenticated())
+                        .requestMatchers("/**").permitAll() 
+                )
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

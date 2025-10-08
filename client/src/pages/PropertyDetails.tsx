@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { MapPin, Star, Phone, Mail, Calendar, IndianRupee, ChevronLeft, ChevronRight, Heart, Share } from 'lucide-react'
 import { Property } from '../types'
-import { mockProperties } from '../data/mockData'
+import { fetchPropertyById } from '../api'
 import { useAuth } from '../context/AuthContext'
 
 const PropertyDetails: React.FC = () => {
@@ -14,10 +14,18 @@ const PropertyDetails: React.FC = () => {
 	const [isFavorite, setIsFavorite] = useState(false)
 
 	useEffect(() => {
-		const foundProperty = mockProperties.find((p) => p.id === id)
-		setProperty(foundProperty || null)
+		const loadProperty = async () => {
+			try {
+				const data = await fetchPropertyById(id!)
+				setProperty(data)
+			} catch (err) {
+				console.error(err)
+				setProperty(null)
+			}
+		}
+		if (id) loadProperty()
 	}, [id])
-
+	
 	if (!property) {
 		return (
 			<div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
@@ -44,7 +52,6 @@ const PropertyDetails: React.FC = () => {
 			navigate('/login')
 			return
 		}
-		// Handle rent/buy logic here
 		alert(`Interest registered for ${property.title}!`)
 	}
 

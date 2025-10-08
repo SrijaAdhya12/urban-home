@@ -21,20 +21,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PropertyController {
 
-    private final PropertyService propertyService; // real service
-    private final PropertyServiceMock propertyServiceMock; // mock service for frontend testing
+    private final PropertyService propertyService; 
+    private final PropertyServiceMock propertyServiceMock; 
 
-    // -------------------------------
-    // Use mock service for React testing
-    // -------------------------------
+    
     @GetMapping("/mock")
     public ResponseEntity<List<PropertyResponse>> getAllMockProperties() {
         return ResponseEntity.ok(propertyServiceMock.getAllProperties());
     }
 
-    // -------------------------------
-    // Real properties with filters & pagination
-    // -------------------------------
+    @GetMapping("/mock/{id}")
+    public ResponseEntity<PropertyResponse> getMockPropertyById(@PathVariable Long id) {
+        return propertyServiceMock.getPropertyById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+   
     @GetMapping
     public Page<Property> getProperties(
             @RequestParam(required = false) String city,

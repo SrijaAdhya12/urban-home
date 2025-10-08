@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PropertyServiceMock {
@@ -37,6 +38,11 @@ public class PropertyServiceMock {
                         .media(List.of(
                                 "https://example.com/images/apt1.jpg",
                                 "https://example.com/images/apt2.jpg"))
+                        .owner(PropertyResponse.Owner.builder()
+                                .name("Rahul Sharma")
+                                .phone("9876543210")
+                                .email("rahul.sharma@example.com")
+                                .build())
                         .dateAdded(LocalDateTime.now().minusDays(2))
                         .dateModified(LocalDateTime.now())
                         .build(),
@@ -48,7 +54,7 @@ public class PropertyServiceMock {
                         .type(PropertyResponse.PropertyType.HOUSE)
                         .rating(4.8)
                         .price(PropertyResponse.Price.builder()
-                                .amount(1_20_00_000)
+                                .amount(12000000)
                                 .type("sale")
                                 .build())
                         .location(PropertyResponse.Location.builder()
@@ -62,6 +68,11 @@ public class PropertyServiceMock {
                         .features(List.of("Swimming Pool", "Gym", "Garden"))
                         .restrictions(List.of("No Pets"))
                         .media(List.of("https://example.com/images/villa.jpg"))
+                        .owner(PropertyResponse.Owner.builder()
+                                .name("Anita Reddy")
+                                .phone("9123456780")
+                                .email("anita.reddy@example.com")
+                                .build())
                         .dateAdded(LocalDateTime.now().minusDays(5))
                         .dateModified(LocalDateTime.now())
                         .build());
@@ -69,5 +80,11 @@ public class PropertyServiceMock {
 
     public List<PropertyResponse> getAllProperties() {
         return properties;
+    }
+
+    public Optional<PropertyResponse> getPropertyById(Long id) {
+        return properties.stream()
+                .filter(p -> p.getId().equals(id))
+                .findFirst();
     }
 }

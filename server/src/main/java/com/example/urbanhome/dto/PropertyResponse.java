@@ -48,6 +48,16 @@ public class PropertyResponse {
         private String address;
     }
 
+    private Owner owner;
+
+    @Data
+    @Builder
+    public static class Owner {
+        private String name;
+        private String phone;
+        private String email;
+    }
+
     public enum PropertyType {
         PG, FLAT, APARTMENT, HOUSE
     }
