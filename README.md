@@ -1,4 +1,4 @@
-    updated on: 08th October 2025, Wednesday
+    updated on: 10th October 2025, Friday
 
 <div align=center>
     <a href="https://github.com/SrijaAdhya12/urban-home">
@@ -126,4 +126,4 @@
 [line]: https://user-images.githubusercontent.com/75939390/137615281-3a875960-92cc-407f-97fe-fd2319bdb252.png
 [License]: https://github.com/SrijaAdhya12/urban-home/blob/main/LICENSE
 
-<!-- 08/10/25 -->
+<!-- 10/10/25 -->
